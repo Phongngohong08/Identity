@@ -1,0 +1,44 @@
+package com.nhp.Identity.controller;
+
+import com.nhp.Identity.dto.request.UserCreationRequest;
+import com.nhp.Identity.dto.request.UserUpdateRequest;
+import com.nhp.Identity.entity.User;
+import com.nhp.Identity.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/users")
+@RequiredArgsConstructor
+public class UserController {
+
+    private final UserService userService;
+
+    @PostMapping
+    User createUser(@RequestBody UserCreationRequest request){
+        return userService.createUser(request);
+    }
+
+    @GetMapping
+    List<User> getUsers(){
+        return userService.getUsers();
+    }
+
+    @GetMapping("/{userId}")
+    User getUser(@PathVariable("userId") Long userId){
+        return userService.getUser(userId);
+    }
+
+    @PutMapping("/{userId}")
+    User updateUser(@PathVariable Long userId, @RequestBody UserUpdateRequest request){
+        return userService.updateUser(userId, request);
+    }
+
+    @DeleteMapping("/{userId}")
+    String deleteUser(@PathVariable Long userId){
+        userService.deleteUser(userId);
+        return "User has been deleted";
+    }
+}
