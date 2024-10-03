@@ -2,8 +2,10 @@ package com.nhp.Identity.controller;
 
 import com.nhp.Identity.dto.request.UserCreationRequest;
 import com.nhp.Identity.dto.request.UserUpdateRequest;
+import com.nhp.Identity.dto.response.ApiResponse;
 import com.nhp.Identity.entity.User;
 import com.nhp.Identity.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +19,11 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    User createUser(@RequestBody UserCreationRequest request){
-        return userService.createUser(request);
+    User createUser(@RequestBody @Valid UserCreationRequest request){
+
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.createUser(request));
+        return apiResponse.getResult();
     }
 
     @GetMapping
@@ -32,7 +37,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    User updateUser(@PathVariable Long userId, @RequestBody UserUpdateRequest request){
+    User updateUser(@PathVariable Long userId, @RequestBody @Valid UserUpdateRequest request){
         return userService.updateUser(userId, request);
     }
 

@@ -3,6 +3,8 @@ package com.nhp.Identity.service.implement;
 import com.nhp.Identity.dto.request.UserCreationRequest;
 import com.nhp.Identity.dto.request.UserUpdateRequest;
 import com.nhp.Identity.entity.User;
+import com.nhp.Identity.exception.AppException;
+import com.nhp.Identity.exception.ErrorCode;
 import com.nhp.Identity.repository.UserRepository;
 import com.nhp.Identity.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,9 @@ public class UserServiceImp implements UserService {
     @Override
     public User createUser(UserCreationRequest request) {
         User user = new User();
+
+        if (userRepository.existsByUsername(request.getUsername()))
+            throw new AppException(ErrorCode.USER_EXISTED);
 
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
